@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+    </head>
+<body>
+    
+<form >
+  Name:<br>
+  <input type="text" name="name" value="" id="username">
+  <br><br>
+</form>
+    <button onclick="addUser()" id="addbtn">Add</button>
+    <button onclick="updateUser()" style="visibility: hidden" id="updatebtn">Update</button>
+    <br>
+    <br>
+<table id="myTable" class="table table-condensed">
+    <tr>
+        <td>Name</td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+<br>
+
+<script>
+    
+    var count    = 0;
+    var userList = []; 
+    var deleteId  = 0;
+function addUser() {
+    var name = document.getElementById("username").value;
+        if(name != "")
+        {
+            count++;
+    var table = document.getElementById("myTable");
+    var row = table.insertRow(count);
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+            
+    cell1.innerHTML = name;
+    userList.push(name);
+            
+    cell2.innerHTML = "<a href='#'>Edit</a>";
+    cell2.onclick   = function editUser(){
+                    objectRow = userList[this.parentElement.rowIndex - 1];
+        
+                    deleteId  = this.parentElement.rowIndex ;
+        
+                    lTable = document.getElementById("myTable");
+                    lTable.style.visibility = "hidden";
+        
+                    updateBtn = document.getElementById("updatebtn");
+                    updateBtn.style.visibility = "visible"
+        
+                    userBtn = document.getElementById("addbtn");
+                    userBtn.style.visibility = "hidden"
+        
+                    name = document.getElementById("username");
+                    name.value = objectRow;
+        } 
+    
+    cell3.innerHTML = "<a href='#'>delete</a>";
+    cell3.onclick   = function deleteUser(){
+        
+        var index = this.parentElement.rowIndex ;
+        this.parentElement.remove(this);
+        var len = userList.length;
+        userList.splice(index - 1 , 1)
+    
+        --count;
+        
+        }
+   
+    }
+}
+    
+function updateUser(){
+    newUser = document.getElementById("username").value;
+    if(newUser != "" )
+    {
+        tableRows = document.getElementById("myTable").rows;
+        var cells = tableRows[deleteId].cells;
+        for(i = 0 ; i < userList.length ; i++)
+            {
+                if(i == deleteId - 1)
+                    {
+                        userList[deleteId - 1] = newUser;
+                        break;
+                    }
+            }
+        cells[0].innerHTML = newUser;
+        document.getElementById("myTable").style.visibility   = "visible";
+        document.getElementById("addbtn").style.visibility    = "visible";
+        document.getElementById("updatebtn").style.visibility = "hidden";
+        document.getElementById("username").value = "";
+    }
+        
+}
+
+</script>
+
+</body>
+</html>
